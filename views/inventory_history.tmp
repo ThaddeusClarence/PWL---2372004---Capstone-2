@@ -1,0 +1,47 @@
+        div.modal-dialog.modal-dialog-centered
+          div.modal-content
+            div.modal-header.bg-primary.text-white
+              h5.modal-title.fw-bold.d-flex.align-items-center
+                i.bi.bi-tools.me-2
+                span Catat Pemeliharaan Baru
+              button.btn-close.btn-close-white(type="button" data-bs-dismiss="modal" aria-label="Close")
+            form(action=`/inventory/${inventory.id}/maintenance/add` method="POST")
+              div.modal-body.text-start.p-4
+                div.mb-3
+                  label.form-label Tanggal Pemeliharaan
+                  input.form-control(type="datetime-local" name="maintenance_date" required)
+                div.mb-3
+                  label.form-label Kondisi Baru Setelah Pemeliharaan
+                  input.form-control(type="text" name="new_condition" required placeholder="Misal: Baik, Telah Diperbaiki")
+                div.mb-3
+                  label.form-label Deskripsi / Keterangan Pekerjaan
+                  textarea.form-control(name="description" rows="3" required placeholder="Jelaskan detail pemeliharaan atau kerusakan...")
+              
+                hr
+                h6.fw-bold Penggunaan Barang Habis Pakai (BHP) - Opsional
+                div.mb-3
+                  label.form-label Pilih BHP
+                  select.form-select(name="consumable_id")
+                    option(value="") -- Tidak ada BHP yang digunakan --
+                    if consumablesList && consumablesList.length > 0
+                      each cons in consumablesList
+                        option(value=cons.id) #{cons.name} (Stok: #{cons.stock})
+                div.mb-3
+                  label.form-label Jumlah Digunakan
+                  input.form-control(type="number" name="quantity_used" min="1" placeholder="Masukkan jumlah yang dipakai (jika memilih BHP)")
+              div.modal-footer
+                button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
+                button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Log
+
+    script.
+        const searchInput = document.getElementById('searchInput');
+        if(searchInput) {
+          searchInput.addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let items = document.querySelectorAll('.timeline-item');
+            items.forEach(item => {
+              let text = item.innerText.toLowerCase();
+              item.style.display = text.includes(filter) ? '' : 'none';
+            });
+          });
+        }

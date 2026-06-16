@@ -1,0 +1,141 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Register - Sistem Inventaris Laboratorium
+        style.
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            body {
+                font-family: 'Inter', sans-serif;
+                background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+            }
+            .login-container {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 40px;
+                border-radius: 16px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+                width: 100%;
+                max-width: 400px;
+                text-align: center;
+            }
+            .login-container h2 {
+                margin-top: 0;
+                font-weight: 600;
+                margin-bottom: 24px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+                text-align: left;
+            }
+            .form-group label {
+                display: block;
+                font-size: 14px;
+                margin-bottom: 6px;
+                color: #ccc;
+            }
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 12px;
+                background: rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                color: #fff;
+                font-size: 16px;
+                box-sizing: border-box;
+                transition: all 0.3s ease;
+            }
+            .form-group input:focus, .form-group select:focus {
+                outline: none;
+                border-color: #00d2ff;
+                box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            }
+            .form-group select option {
+                background: #203a43;
+                color: white;
+            }
+            .btn-login {
+                width: 100%;
+                padding: 14px;
+                background: linear-gradient(to right, #00d2ff, #3a7bd5);
+                border: none;
+                border-radius: 8px;
+                color: white;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s, box-shadow 0.2s;
+                margin-top: 10px;
+            }
+            .btn-login:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 210, 255, 0.4);
+            }
+            .error-message {
+                background: rgba(255, 75, 75, 0.2);
+                color: #ff4b4b;
+                padding: 10px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                border: 1px solid rgba(255, 75, 75, 0.4);
+                font-size: 14px;
+            }
+            .success-message {
+                background: rgba(75, 255, 75, 0.2);
+                color: #4bff4b;
+                padding: 10px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                border: 1px solid rgba(75, 255, 75, 0.4);
+                font-size: 14px;
+            }
+            .register-link {
+                margin-top: 20px;
+                font-size: 14px;
+                color: #ccc;
+            }
+            .register-link a {
+                color: #00d2ff;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .register-link a:hover {
+                text-decoration: underline;
+            }
+    body
+        .login-container
+            h2 Laboratorium Register
+            if error
+                .error-message= error
+            if success
+                .success-message= success
+            form(action="/register" method="POST")
+                .form-group
+                    label(for="name") Nama Lengkap
+                    input(type="text" id="name" name="name" required autocomplete="off")
+                .form-group
+                    label(for="email") Email
+                    input(type="email" id="email" name="email" required autocomplete="off")
+                .form-group
+                    label(for="password") Password
+                    input(type="password" id="password" name="password" required)
+                .form-group
+                    label(for="role") Peran (Role)
+                    select(id="role" name="role" required)
+                        option(value="" disabled selected) -- Pilih Peran --
+                        option(value="Administrator") Administrator
+                        option(value="Kepala Laboratorium") Kepala Laboratorium
+                        option(value="Ketua Program Studi") Ketua Program Studi
+                        option(value="Staf Administrasi") Staf Administrasi
+                        option(value="Staf Laboratorium") Staf Laboratorium
+                button.btn-login(type="submit") Register
+            p.register-link Sudah punya akun? 
+              a(href="/login") Login di sini

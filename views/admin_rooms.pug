@@ -1,0 +1,251 @@
+doctype html
+html
+  head
+    title= title
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
+    style.
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        min-height: 100vh;
+      }
+      .navbar {
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      }
+      .navbar-brand {
+        color: #0f172a !important;
+      }
+      .main-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+      }
+      .room-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+      }
+      
+      .table {
+        color: #0f172a !important;
+        margin-bottom: 0;
+      }
+      .table > :not(caption) > * > * {
+        background-color: transparent !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+      }
+      .table th {
+        color: #64748b !important;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e2e8f0 !important;
+        padding: 12px 20px;
+        background-color: #f8fafc !important;
+      }
+      .table td {
+        border-bottom: 1px solid #f1f5f9 !important;
+        padding: 14px 20px;
+        font-size: 14px;
+      }
+      .table tbody tr:hover {
+        background: #f8fafc !important;
+      }
+      
+      .btn-edit {
+        background: #fef3c7;
+        color: #d97706;
+        border: 1px solid #fde68a;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .btn-edit:hover {
+        background: #f59e0b;
+        color: white;
+        border-color: #f59e0b;
+        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
+        transform: translateY(-1px);
+      }
+      
+      .btn-delete {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .btn-delete:hover {
+        background: #dc2626;
+        color: white;
+        border-color: #dc2626;
+        box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);
+        transform: translateY(-1px);
+      }
+      
+      .modal-content {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        color: #0f172a;
+        border-radius: 18px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+      .modal-header {
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .modal-footer {
+        border-top: 1px solid #e2e8f0;
+      }
+      .form-control {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+        border-radius: 8px;
+      }
+      .form-control:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+      }
+      .modal-body label {
+        color: #475569;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 6px;
+      }
+  body
+    nav.navbar.navbar-expand-lg.navbar-light.py-3
+      div.container
+        a.navbar-brand.fw-bold.d-flex.align-items-center(href="/")
+          i.bi.bi-grid-1x2-fill.me-2.text-primary
+          span= title
+        div.d-flex.align-items-center
+          div.me-3.text-end.d-none.d-sm-block
+            div.text-dark.fw-medium= user.name
+            div.text-muted(style="font-size: 11px;")= user.role
+          a.btn.btn-outline-primary.btn-sm.px-3.rounded-pill.me-2(href="/")
+            i.bi.bi-arrow-left-circle.me-1
+            span Dashboard
+          a.btn.btn-outline-danger.btn-sm.px-3.rounded-pill(href="/logout")
+            i.bi.bi-box-arrow-right.me-1
+            span Logout
+            
+    div.container.mt-5.mb-5
+      div.row.justify-content-center
+        div.col-md-10
+          div.card.main-card.p-4
+            div.d-flex.justify-content-between.align-items-center.mb-3
+              div
+                h2.text-primary.fw-bold.mb-1 Kelola Ruangan
+                p.text-muted.mb-0 Manajemen Ruangan Laboratorium
+              button.btn.btn-primary.px-4.rounded-pill(type="button" data-bs-toggle="modal" data-bs-target="#addRoomModal")
+                i.bi.bi-plus-circle-fill.me-2
+                span Tambah Ruangan Baru
+              
+            hr.my-4(style="opacity: 0.1;")
+            
+            if error
+              div.alert.alert-danger.alert-dismissible.fade.show.border-0.bg-danger.bg-opacity-10.text-danger.mb-4(role="alert")
+                i.bi.bi-exclamation-triangle-fill.me-2
+                span= error
+                button.btn-close(type="button" data-bs-dismiss="alert" aria-label="Close")
+            if success
+              div.alert.alert-success.alert-dismissible.fade.show.border-0.bg-success.bg-opacity-10.text-success.mb-4(role="alert")
+                i.bi.bi-check-circle-fill.me-2
+                span= success
+                button.btn-close(type="button" data-bs-dismiss="alert" aria-label="Close")
+            
+            h5.fw-semibold.mb-4.text-dark
+              i.bi.bi-door-open-fill.me-2.text-secondary
+              span Daftar Ruangan Laboratorium
+            
+            if roomsList && roomsList.length
+              div.card.room-card
+                div.card-body.p-0
+                  div.table-responsive
+                    table.table.table-hover.align-middle
+                      thead
+                        tr
+                          th(style="width: 10%") ID
+                          th Nama Ruangan
+                          th Deskripsi
+                          th.text-end(style="width: 25%") Aksi
+                      tbody
+                        each val in roomsList
+                          tr
+                            td.text-muted= val.id
+                            td.fw-semibold.text-dark= val.name
+                            td.text-secondary= val.description || 'Tidak ada deskripsi'
+                            td.text-end
+                              div.d-inline-flex.gap-2
+                                button.btn.btn-edit(type="button" data-bs-toggle="modal" data-bs-target=`#editRoomModal${val.id}`)
+                                  i.bi.bi-pencil-square.me-1
+                                  span Edit
+                                form(action=`/admin/rooms/delete/${val.id}` method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ruangan ini?');" style="display:inline;")
+                                  button.btn.btn-delete(type="submit")
+                                    i.bi.bi-trash-fill.me-1
+                                    span Hapus
+            else
+              div.alert.alert-warning.border-0.bg-warning.bg-opacity-10.text-warning.mb-0
+                i.bi.bi-exclamation-circle.me-2
+                span Belum ada ruangan yang terdaftar.
+
+    //- Modal Tambah Ruangan
+    div.modal.fade(id="addRoomModal" tabindex="-1" aria-hidden="true")
+      div.modal-dialog.modal-dialog-centered
+        div.modal-content
+          div.modal-header.bg-primary.text-white
+            h5.modal-title.fw-bold.d-flex.align-items-center
+              i.bi.bi-plus-circle-fill.me-2
+              span Tambah Ruangan Baru
+            button.btn-close.btn-close-white(type="button" data-bs-dismiss="modal" aria-label="Close")
+          form(action="/admin/rooms/add" method="POST")
+            div.modal-body.text-start.p-4
+              div.mb-3
+                label.form-label Nama Ruangan
+                input.form-control(type="text" name="name" placeholder="Contoh: Lab Komputer 1" required)
+              div.mb-3
+                label.form-label Deskripsi / Keterangan
+                textarea.form-control(name="description" rows="3" placeholder="Masukkan deskripsi ruangan...")
+            div.modal-footer
+              button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
+              button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Ruangan
+
+    //- Modal Edit Ruangan
+    if roomsList && roomsList.length
+      each val in roomsList
+        div.modal.fade(id=`editRoomModal${val.id}` tabindex="-1" aria-hidden="true")
+          div.modal-dialog.modal-dialog-centered
+            div.modal-content
+              div.modal-header
+                h5.modal-title.fw-bold.d-flex.align-items-center.text-dark
+                  i.bi.bi-pencil-square.me-2.text-primary
+                  span Edit Ruangan: #{val.name}
+                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+              form(action=`/admin/rooms/edit/${val.id}` method="POST")
+                div.modal-body.text-start.p-4
+                  div.mb-3
+                    label.form-label Nama Ruangan
+                    input.form-control(type="text" name="name" value=val.name required)
+                  div.mb-3
+                    label.form-label Deskripsi / Keterangan
+                    textarea.form-control(name="description" rows="3")= val.description
+                div.modal-footer
+                  button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
+                  button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Perubahan

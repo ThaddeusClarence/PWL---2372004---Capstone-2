@@ -1,0 +1,90 @@
+doctype html
+html
+  head
+    title= title
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css")
+  body.bg-light
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      div.container
+        a.navbar-brand(href="/") Sistem Manajemen Laboratorium
+        div.d-flex.align-items-center
+          span.text-light.me-3 Halo, #{user.name} (#{user.role})
+          a.btn.btn-outline-danger.btn-sm(href="/logout") Logout
+
+    div.container.mt-5
+      div.d-flex.justify-content-between.align-items-center.mb-4
+        h2.fw-bold Review Draf Pengadaan
+        div.d-flex.gap-2
+          select#statusFilter.form-select(style="max-width: 180px;")
+            option(value="") Semua Status
+            option(value="menunggu review") Menunggu Review
+            option(value="final") Final
+          input#searchInput.form-control(type="text" placeholder="Cari draf..." style="max-width: 250px;")
+          a.btn.btn-secondary(href="/") Kembali ke Dashboard
+
+      if error
+        div.alert.alert-danger.alert-dismissible.fade.show(role="alert")
+          | #{error}
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+      if success
+        div.alert.alert-success.alert-dismissible.fade.show(role="alert")
+          | #{success}
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+
+      div.card.shadow
+        div.card-body
+          if procurementsList.length > 0
+            div.table-responsive
+              table.table.table-hover.align-middle
+                thead.table-light
+                  tr
+                    th ID
+                    th Tahun
+                    th Judul Pengadaan
+                    th Dibuat Oleh
+                    th Tanggal Dibuat
+                    th Status
+                    th Aksi
+                tbody
+                  each proc in procurementsList
+                    tr
+                      td= proc.id
+                      td= proc.year
+                      td= proc.title
+                      td= proc.creator_name
+                      td= new Date(proc.created_at).toLocaleDateString('id-ID')
+                      td
+                        if proc.status === 'Locked'
+                          span.badge.bg-warning Menunggu Review
+                        else if proc.status === 'Finalized'
+                          span.badge.bg-success Final
+                      td
+                        a.btn.btn-primary.btn-sm(href=`/kaprodi/procurements/${proc.id}`) Detail & Review
+          else
+            div.alert.alert-info Saat ini tidak ada draf pengadaan yang perlu di-review.
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
+    script.
+      const searchInput = document.getElementById('searchInput');
+      const statusFilter = document.getElementById('statusFilter');
+      
+      function filterTable() {
+        let textFilter = searchInput ? searchInput.value.toLowerCase() : '';
+        let statusVal = statusFilter ? statusFilter.value.toLowerCase() : '';
+        
+        let rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+          let text = row.innerText.toLowerCase();
+          let statusCell = row.querySelector('td:nth-child(6)');
+          let statusText = statusCell ? statusCell.innerText.toLowerCase() : '';
+          
+          let matchText = text.includes(textFilter);
+          let matchStatus = statusVal === '' || statusText.includes(statusVal);
+          
+          row.style.display = (matchText && matchStatus) ? '' : 'none';
+        });
+      }
+
+      if(searchInput) searchInput.addEventListener('keyup', filterTable);
+      if(statusFilter) statusFilter.addEventListener('change', filterTable);

@@ -1,0 +1,110 @@
+doctype html
+html
+  head
+    title= title
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css")
+  body.bg-light
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      div.container
+        a.navbar-brand(href="/") Sistem Manajemen Laboratorium
+        div.d-flex.align-items-center
+          span.text-light.me-3 Halo, #{user.name} (#{user.role})
+          a.btn.btn-outline-danger.btn-sm(href="/logout") Logout
+
+    div.container.mt-5
+      div.d-flex.justify-content-between.align-items-center.mb-4
+        h2.fw-bold Detail Draf Pengadaan
+        a.btn.btn-secondary(href="/kaprodi/procurements") Kembali
+
+      if error
+        div.alert.alert-danger.alert-dismissible.fade.show(role="alert")
+          | #{error}
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+      if success
+        div.alert.alert-success.alert-dismissible.fade.show(role="alert")
+          | #{success}
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+
+      div.card.shadow.mb-4
+        div.card-body
+          h4.card-title #{procurement.title} (#{procurement.year})
+          p.card-text
+            strong Status Draf: 
+            if procurement.status === 'Locked'
+              span.badge.bg-warning Menunggu Review
+            else if procurement.status === 'Finalized'
+              span.badge.bg-success Final
+          p.card-text
+            strong Dibuat Oleh: 
+            span #{procurement.creator_name} pada #{new Date(procurement.created_at).toLocaleDateString('id-ID')}
+
+      h4.mb-3 Daftar Item Pengadaan
+
+      div.card.shadow
+        div.card-body
+          if items.length > 0
+            div.table-responsive
+              table.table.table-hover.align-middle
+                thead.table-light
+                  tr
+                    th Tipe
+                    th Nama Barang
+                    th Harga
+                    th Qty
+                    th Total
+                    th Link
+                    th Pengganti Untuk
+                    th Status Review
+                    if procurement.status === 'Locked'
+                      th Aksi Review
+                tbody
+                  each item in items
+                    tr
+                      td
+                        if item.item_type === 'Inventory'
+                          span.badge.bg-primary Aset/Inventaris
+                        else
+                          span.badge.bg-info BHP/Consumable
+                      td= item.name
+                      td Rp #{item.price.toLocaleString('id-ID')}
+                      td= item.quantity
+                      td Rp #{(item.price * item.quantity).toLocaleString('id-ID')}
+                      td
+                        if item.link
+                          a(href=item.link target="_blank") Lihat Link
+                        else
+                          span.text-muted -
+                      td
+                        if item.replace_inventory_id
+                          span.badge.bg-secondary #{item.replace_item_name}
+                        else
+                          span.text-muted -
+                      td
+                        if item.approval_status === 'Pending'
+                          span.badge.bg-warning Pending
+                        else if item.approval_status === 'Approved'
+                          span.badge.bg-success Disetujui
+                        else if item.approval_status === 'Rejected'
+                          span.badge.bg-danger Ditolak
+                      
+                      if procurement.status === 'Locked'
+                        td
+                          div.d-flex.gap-2
+                            form(action=`/kaprodi/procurements/${procurement.id}/item/${item.id}/review`, method="POST", style="display:inline;")
+                              input(type="hidden", name="approval_status", value="Approved")
+                              button.btn.btn-success.btn-sm(type="submit", disabled=item.approval_status==='Approved', title="Setujui")
+                                i.bi.bi-check-circle
+                            form(action=`/kaprodi/procurements/${procurement.id}/item/${item.id}/review`, method="POST", style="display:inline;")
+                              input(type="hidden", name="approval_status", value="Rejected")
+                              button.btn.btn-danger.btn-sm(type="submit", disabled=item.approval_status==='Rejected', title="Tolak")
+                                i.bi.bi-x-circle
+          else
+            div.alert.alert-info Belum ada item yang ditambahkan pada draf ini.
+
+      if procurement.status === 'Locked'
+        div.d-flex.justify-content-end.mt-4
+          form(action=`/kaprodi/procurements/${procurement.id}/finalize`, method="POST", onsubmit="return confirm('Anda yakin ingin memfinalisasi draf ini? Setelah difinalisasi, status tidak dapat diubah lagi.');")
+            button.btn.btn-primary.btn-lg(type="submit") Finalisasi Draf Pengadaan
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
