@@ -305,10 +305,6 @@ html
                   h5.fw-semibold.mb-0.text-dark
                     i.bi.bi-droplet-half.me-2.text-secondary
                     span Daftar Barang Habis Pakai
-                  if user.role === 'Staf Laboratorium'
-                    button.btn.btn-primary.px-4.rounded-pill.btn-sm(type="button" data-bs-toggle="modal" data-bs-target="#addConsumableModal")
-                      i.bi.bi-plus-circle-fill.me-2
-                      span Tambah BHP
 
                 if consumablesList && consumablesList.length
                   div.card.content-card
@@ -421,115 +417,92 @@ html
 
     //- INVENTORY MODALS
     //- Modal Edit Inventaris                
-      if inventoryList && inventoryList.length
-        each val in inventoryList
-          div.modal.fade(id=`editInventoryModal${val.id}` tabindex="-1" aria-hidden="true")
-            div.modal-dialog.modal-dialog-centered.modal-lg
-              div.modal-content
-                div.modal-header
-                  h5.modal-title.fw-bold.d-flex.align-items-center.text-dark
-                    i.bi.bi-pencil-square.me-2.text-primary
-                    span Edit Inventaris: #{val.name}
-                  button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
-                form(action=`/inventory/edit/${val.id}` method="POST" enctype="multipart/form-data")
-                  div.modal-body.text-start.p-4
-                    div.row
-                      div.col-md-6.mb-3
-                        label.form-label Kode Barang
-                        input.form-control(type="text" name="item_code" value=val.item_code)
-                      div.col-md-6.mb-3
-                        label.form-label Nama Barang
-                        input.form-control(type="text" name="name" value=val.name required)
-                    div.row
-                      div.col-md-6.mb-3
-                        label.form-label Ruangan
-                        select.form-select(name="room_id")
-                          option(value="") -- Pilih Ruangan --
-                          if rooms && rooms.length
-                            each room in rooms
-                              option(value=room.id selected=(val.room_id == room.id)) #{room.name}
-                    div.row
-                      div.col-md-6.mb-3
-                        label.form-label Status
-                        select.form-select(name="status")
-                          option(value="Active" selected=(val.status=='Active')) Aktif
-                          option(value="Maintenance" selected=(val.status=='Maintenance')) Maintenance
-                          option(value="Disposed" selected=(val.status=='Disposed')) Dihapus / Disposed
-                      div.col-md-6.mb-3
-                        label.form-label QR Univ (Dibuat otomatis dari Kode Barang)
-                        if val.qr_code_path
-                          div.mt-2
-                            img.d-block.mt-1.rounded(src=val.qr_code_path style="max-height: 60px;")
-                        else
-                          small.text-muted Belum ada QR. Akan dibuat otomatis.
-                      div.col-md-6.mb-3
-                        label.form-label Upload QR Prodi Baru (Kosongkan jika tidak diubah)
-                        input.form-control(type="file" name="qr_code_prodi" accept="image/*")
-                        if val.qr_code_prodi_path
-                          div.mt-2
-                            small.text-muted QR Prodi saat ini:
-                            img.d-block.mt-1.rounded(src=val.qr_code_prodi_path style="max-height: 60px;")
-                    div.row
-                      div.col-md-6.mb-3
-                        label.form-label Kondisi Barang
-                        input.form-control(type="text" name="item_condition" value=val.item_condition)
-                      div.col-md-6.mb-3
-                        label.form-label Tanggal Diterima
-                        - const rd = val.received_date ? new Date(val.received_date).toISOString().split('T')[0] : ''
-                        input.form-control(type="date" name="received_date" value=rd)
-                  div.modal-footer
-                    button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
-                    button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Perubahan
-
-    //- CONSUMABLES MODALS
-    if user.role === 'Staf Laboratorium'
-      div.modal.fade(id="addConsumableModal" tabindex="-1" aria-hidden="true")
-        div.modal-dialog.modal-dialog-centered
-          div.modal-content
-            div.modal-header.bg-primary.text-white
-              h5.modal-title.fw-bold.d-flex.align-items-center
-                i.bi.bi-plus-circle-fill.me-2
-                span Tambah BHP Baru
-              button.btn-close.btn-close-white(type="button" data-bs-dismiss="modal" aria-label="Close")
-            form(action="/consumables/add" method="POST")
-              div.modal-body.text-start.p-4
-                div.mb-3
-                  label.form-label Nama Barang
-                  input.form-control(type="text" name="name" required placeholder="Misal: Kertas HVS A4")
-                div.mb-3
-                  label.form-label Jumlah Stok Awal
-                  input.form-control(type="number" name="stock" value="0" min="0" required)
-                div.mb-3
-                  label.form-label Satuan
-                  input.form-control(type="text" name="unit" placeholder="Misal: Rim, Kotak, Pcs")
-              div.modal-footer
-                button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
-                button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Data
-                
-      if consumablesList && consumablesList.length
-        each val in consumablesList
-          div.modal.fade(id=`editConsumableModal${val.id}` tabindex="-1" aria-hidden="true")
-            div.modal-dialog.modal-dialog-centered
-              div.modal-content
-                div.modal-header
-                  h5.modal-title.fw-bold.d-flex.align-items-center.text-dark
-                    i.bi.bi-pencil-square.me-2.text-primary
-                    span Edit BHP: #{val.name}
-                  button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
-                form(action=`/consumables/edit/${val.id}` method="POST")
-                  div.modal-body.text-start.p-4
-                    div.mb-3
+    if inventoryList && inventoryList.length
+      each val in inventoryList
+        div.modal.fade(id=`editInventoryModal${val.id}` tabindex="-1" aria-hidden="true")
+          div.modal-dialog.modal-dialog-centered.modal-lg
+            div.modal-content
+              div.modal-header
+                h5.modal-title.fw-bold.d-flex.align-items-center.text-dark
+                  i.bi.bi-pencil-square.me-2.text-primary
+                  span Edit Inventaris: #{val.name}
+                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+              form(action=`/inventory/edit/${val.id}` method="POST" enctype="multipart/form-data")
+                div.modal-body.text-start.p-4
+                  div.row
+                    div.col-md-6.mb-3
+                      label.form-label Kode Barang
+                      input.form-control(type="text" name="item_code" value=val.item_code)
+                    div.col-md-6.mb-3
                       label.form-label Nama Barang
                       input.form-control(type="text" name="name" value=val.name required)
-                    div.mb-3
-                      label.form-label Jumlah Stok
-                      input.form-control(type="number" name="stock" value=val.stock min="0" required)
-                    div.mb-3
-                      label.form-label Satuan
-                      input.form-control(type="text" name="unit" value=val.unit)
-                  div.modal-footer
-                    button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
-                    button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Perubahan
+                  div.row
+                    div.col-md-6.mb-3
+                      label.form-label Ruangan
+                      select.form-select(name="room_id")
+                        option(value="") -- Pilih Ruangan --
+                        if rooms && rooms.length
+                          each room in rooms
+                            option(value=room.id selected=(val.room_id == room.id)) #{room.name}
+                  div.row
+                    div.col-md-6.mb-3
+                      label.form-label Status
+                      select.form-select(name="status")
+                        option(value="Active" selected=(val.status=='Active')) Aktif
+                        option(value="Maintenance" selected=(val.status=='Maintenance')) Maintenance
+                        option(value="Disposed" selected=(val.status=='Disposed')) Dihapus / Disposed
+                    div.col-md-6.mb-3
+                      label.form-label QR Univ (Dibuat otomatis dari Kode Barang)
+                      if val.qr_code_path
+                        div.mt-2
+                          img.d-block.mt-1.rounded(src=val.qr_code_path style="max-height: 60px;")
+                      else
+                        small.text-muted Belum ada QR. Akan dibuat otomatis.
+                    div.col-md-6.mb-3
+                      label.form-label Upload QR Prodi Baru (Kosongkan jika tidak diubah)
+                      input.form-control(type="file" name="qr_code_prodi" accept="image/*")
+                      if val.qr_code_prodi_path
+                        div.mt-2
+                          small.text-muted QR Prodi saat ini:
+                          img.d-block.mt-1.rounded(src=val.qr_code_prodi_path style="max-height: 60px;")
+                  div.row
+                    div.col-md-6.mb-3
+                      label.form-label Kondisi Barang
+                      input.form-control(type="text" name="item_condition" value=val.item_condition)
+                    div.col-md-6.mb-3
+                      label.form-label Tanggal Diterima
+                      - const rd = val.received_date ? new Date(val.received_date).toISOString().split('T')[0] : ''
+                      input.form-control(type="date" name="received_date" value=rd)
+                div.modal-footer
+                  button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
+                  button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Perubahan
+
+    //- CONSUMABLES MODALS
+                
+    if consumablesList && consumablesList.length
+      each val in consumablesList
+        div.modal.fade(id=`editConsumableModal${val.id}` tabindex="-1" aria-hidden="true")
+          div.modal-dialog.modal-dialog-centered
+            div.modal-content
+              div.modal-header
+                h5.modal-title.fw-bold.d-flex.align-items-center.text-dark
+                  i.bi.bi-pencil-square.me-2.text-primary
+                  span Edit BHP: #{val.name}
+                button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+              form(action=`/consumables/edit/${val.id}` method="POST")
+                div.modal-body.text-start.p-4
+                  div.mb-3
+                    label.form-label Nama Barang
+                    input.form-control(type="text" name="name" value=val.name required)
+                  div.mb-3
+                    label.form-label Jumlah Stok (Otomatis dari Penerimaan)
+                    input.form-control(type="number" name="stock" value=val.stock min="0" readonly style="background-color: #f8fafc;")
+                  div.mb-3
+                    label.form-label Satuan
+                    input.form-control(type="text" name="unit" value=val.unit)
+                div.modal-footer
+                  button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
+                  button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Perubahan
 
     //- PROCUREMENTS MODALS
     if user.role === 'Kepala Laboratorium'

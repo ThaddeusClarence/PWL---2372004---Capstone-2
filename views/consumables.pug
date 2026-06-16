@@ -154,10 +154,6 @@ html
               div
                 h2.text-primary.fw-bold.mb-1 Kelola BHP
                 p.text-muted.mb-0 Digitalisasi Barang Habis Pakai (BHP)
-              if user.role === 'Kepala Laboratorium' || user.role === 'Staf Laboratorium'
-                button.btn.btn-primary.px-4.rounded-pill(type="button" data-bs-toggle="modal" data-bs-target="#addConsumableModal")
-                  i.bi.bi-plus-circle-fill.me-2
-                  span Tambah BHP
               
             hr.my-4(style="opacity: 0.1;")
             
@@ -215,29 +211,7 @@ html
                 i.bi.bi-exclamation-circle.me-2
                 span Belum ada data BHP yang terdaftar.
 
-    //- Modal Tambah BHP
-    div.modal.fade(id="addConsumableModal" tabindex="-1" aria-hidden="true")
-      div.modal-dialog.modal-dialog-centered
-        div.modal-content
-          div.modal-header.bg-primary.text-white
-            h5.modal-title.fw-bold.d-flex.align-items-center
-              i.bi.bi-plus-circle-fill.me-2
-              span Tambah BHP Baru
-            button.btn-close.btn-close-white(type="button" data-bs-dismiss="modal" aria-label="Close")
-          form(action="/consumables/add" method="POST")
-            div.modal-body.text-start.p-4
-              div.mb-3
-                label.form-label Nama Barang
-                input.form-control(type="text" name="name" required placeholder="Misal: Kertas HVS A4")
-              div.mb-3
-                label.form-label Jumlah Stok Awal
-                input.form-control(type="number" name="stock" value="0" min="0" required)
-              div.mb-3
-                label.form-label Satuan
-                input.form-control(type="text" name="unit" placeholder="Misal: Rim, Kotak, Pcs")
-            div.modal-footer
-              button.btn.btn-secondary.rounded-pill(type="button" data-bs-dismiss="modal") Batal
-              button.btn.btn-primary.px-4.rounded-pill(type="submit") Simpan Data
+    //- Modal Tambah BHP removed as it is now automated
               
     //- Modal Edit BHP
     if consumablesList && consumablesList.length
@@ -256,8 +230,8 @@ html
                     label.form-label Nama Barang
                     input.form-control(type="text" name="name" value=val.name required)
                   div.mb-3
-                    label.form-label Jumlah Stok
-                    input.form-control(type="number" name="stock" value=val.stock min="0" required)
+                    label.form-label Jumlah Stok (Otomatis dari Penerimaan)
+                    input.form-control(type="number" name="stock" value=val.stock min="0" readonly style="background-color: #f8fafc;")
                   div.mb-3
                     label.form-label Satuan
                     input.form-control(type="text" name="unit" value=val.unit)
